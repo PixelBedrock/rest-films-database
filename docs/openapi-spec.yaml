@@ -1,0 +1,86 @@
+openapi: 3.1.0
+info:
+  title: rest-films-database
+  description: REST API for managing film entries in a database.
+  version: 0.0.0
+servers:
+  - url: 'http://localhost:3000/api/v1'
+paths:
+  /films:
+    post:
+      summary: Add a film to the database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Film"
+  /films/{id}:
+    delete:
+      summary: Remove a film from the database by ID.
+      parameters:
+        - name: id
+          in: path
+          description: Film's iMDB ID
+          required: true
+          schema:
+            type: string
+    get:
+      summary: Get a film from the database by ID.
+      parameters:
+        - name: id
+          in: path
+          description: Film's iMDB ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The film's details are returned.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Film"
+    patch:
+      summary: Update a film in the database by ID.
+      parameters:
+        - name: id
+          in: path
+          description: Film's iMDB ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Film"
+
+components:
+  schemas:
+    Film:
+      type: object
+      properties:
+        imdb_id:
+          type: string
+        title:
+          type: string
+        tagline:
+          type: string
+        overview:
+          type: string
+        genres:
+          type: array
+        release_date:
+          type: string
+        runtime:
+          type: integer
+      required:
+        - imdb_id
+        - title
+        - tagline
+        - overview
+        - genres
+        - release_date
+        - runtime
