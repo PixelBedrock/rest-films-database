@@ -17,7 +17,11 @@ export default async function(req: Request, res: Response) {
             });
         }
 
-        await database.run(SQL`UPDATE films SET title=${req.body.title}, tagline=${req.body.tagline}, overview=${req.body.overview}, genres=${JSON.stringify(req.body.genres)}, release_date=${req.body.release_date}, runtime=${req.body.runtime} WHERE imdb_id=${req.params.id};`);
+        await database.run(SQL`UPDATE films SET title=${req.body.title}, tagline=${req.body.tagline}, overview=${req.body.overview}, release_date=${req.body.release_date}, runtime=${req.body.runtime} WHERE imdb_id=${req.params.id};`);
+        await database.get(SQL`DELETE FROM genres WHERE imdb_id=${req.params.id};`);
+        req.body.genres.forEach(async function(genre) {
+            await database.run(SQL`INSERT INTO genres VALUES (${req.params.id}, ${genre})`);
+        });
 
         return res.status(200).json(req.body);
     } catch (e) {

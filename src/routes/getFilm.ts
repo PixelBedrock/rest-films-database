@@ -8,16 +8,17 @@ export default async function(req: Request, res: Response) {
         filename: "films.sqlite",
         driver: Database
     }),
-        query = await database.get(SQL`SELECT * FROM films WHERE imdb_id=${req.params.id};`);
+        query = await database.all(SQL`SELECT * FROM films LEFT JOIN genres ON films.imdb_id=genres.imdb_id WHERE films.imdb_id=${req.params.id};`);
 
-    if (!query) {
+    if (query.length === 0) {
         return res.status(404).json({
             message: "Film does not exist",
         });
     }
 
     return res.status(200).json({
-        ...query,
-        genres: JSON.parse(query.genres)
+        ...query[0],
+        genres: query.map((o) => o.name),
+        name: undefined
     });
 }
