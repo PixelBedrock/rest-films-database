@@ -18,8 +18,12 @@ export default async function(req: Request, res: Response) {
         }
 
         await database.run(SQL`INSERT INTO films VALUES (
-            ${req.body.imdb_id}, ${req.body.title}, ${req.body.tagline}, ${req.body.overview}, ${JSON.stringify(req.body.genres)}, ${req.body.release_date}, ${req.body.runtime}
+            ${req.body.imdb_id}, ${req.body.title}, ${req.body.tagline}, ${req.body.overview}, ${req.body.release_date}, ${req.body.runtime}
         );`);
+
+        req.body.genres.forEach(async function(genre) {
+           await database.run(SQL`INSERT INTO genres VALUES (${req.body.imdb_id}, ${genre})`);
+        });
 
         return res.status(200).json(req.body);
     } catch (e) {

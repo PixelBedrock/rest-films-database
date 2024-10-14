@@ -10,6 +10,7 @@ export default async function(req: Request, res: Response) {
     });
 
     await database.get(SQL`DELETE FROM films WHERE imdb_id=${req.params.id};`);
+    await database.get(SQL`DELETE FROM genres WHERE imdb_id=${req.params.id};`);
 
-    return res.status(204).send("");
+    return res.sendStatus(204);
 }

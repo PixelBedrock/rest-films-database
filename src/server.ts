@@ -26,9 +26,15 @@ app.listen(port, async function() {
         title TEXT NOT NULL,
         tagline TEXT NOT NULL,
         overview TEXT NOT NULL,
-        genres TEXT NOT NULL,
         release_date TEXT NOT NULL,
         runtime INTEGER NOT NULL
+    );`);
+
+    await database.exec(`CREATE TABLE IF NOT EXISTS genres (
+        imdb_id TEXT NOT NULL,
+        name TEXT NOT NULL,
+        PRIMARY KEY (imdb_id,name),
+        FOREIGN KEY (imdb_id) REFERENCES films(imdb_id)
     );`);
 
     console.log("Server running on port", port);
