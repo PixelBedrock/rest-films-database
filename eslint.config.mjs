@@ -4,5 +4,8 @@ import teslint from "typescript-eslint";
 export default teslint.config(
     eslint.configs.recommended,
     ...teslint.configs.strict,
-    ...teslint.configs.stylistic
+    ...teslint.configs.stylistic,
+    {
+        ignores: ["build/**/*"]
+    }
 );
